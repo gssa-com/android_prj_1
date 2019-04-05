@@ -51,23 +51,6 @@ public class AutoWIFI extends AppCompatActivity implements View.OnClickListener 
 
     private List<ScanResult> mScanResult; // ScanResult List
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-
-            if (action.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION) && isAuthIng == false && isConnected() == false) {
-
-                getWIFIScanResult(context); // get WIFISCanResult
-                wifimanager.startScan(); // for refresh
-
-            } else if (action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
-                sendBroadcast(new Intent("wifi.ON_NETWORK_STATE_CHANGED"));
-            }
-        }
-    };
-
     void getPermission(){
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -98,6 +81,23 @@ public class AutoWIFI extends AppCompatActivity implements View.OnClickListener 
             }
         }
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+
+            if (action.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION) && isAuthIng == false && isConnected() == false) {
+
+                getWIFIScanResult(context); // get WIFISCanResult
+                //wifimanager.startScan(); // for refresh
+
+            } else if (action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
+                sendBroadcast(new Intent("wifi.ON_NETWORK_STATE_CHANGED"));
+            }
+        }
+    };
 
     boolean isConnected(){
         ConnectivityManager manager;
@@ -191,6 +191,7 @@ public class AutoWIFI extends AppCompatActivity implements View.OnClickListener 
         /* 재연결 합니다. */
         WifiConfiguration wifiConfig = new WifiConfiguration(); // 와이파이 연결하기
         wifiConfig.SSID = String.format("\"%s\"", ssid);
+
         if("dksoft".equals(ssid)) {
             wifiConfig.preSharedKey = String.format("\"%s\"", "dksoft0603");
         }
