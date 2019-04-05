@@ -123,12 +123,6 @@ public class AutoWIFI extends AppCompatActivity implements View.OnClickListener 
 
         mScanResult = wifimanager.getScanResults(); // ScanResult
 
-        /*
-        for (int i = 0; i < mScanResult.size(); i++) {
-            ScanResult result = mScanResult.get(i);
-            Log.d(TAG, "SORT 이전 SSID : " + result.SSID + " RSSI : " + result.level);
-        }
-        */
         // level 오름차순 sort
         mScanResult.sort(new Comparator<ScanResult>()
         {
@@ -138,12 +132,7 @@ public class AutoWIFI extends AppCompatActivity implements View.OnClickListener 
                 return arg1.level - arg0.level;  // level 이 - 값이므로 0에서 가까운게 신호가 좋음.
             }
         });
-        /*
-        for (int i = 0; i < mScanResult.size(); i++) {
-            ScanResult result = mScanResult.get(i);
-            Log.d(TAG, "SORT 이후 SSID : " + result.SSID + " RSSI : " + result.level);
-        }
-        */
+
         textStatus.setText("Scan count is \t" + ++scanCount + " times \n");
 
         textStatus.append("=======================================\n");
@@ -167,6 +156,7 @@ public class AutoWIFI extends AppCompatActivity implements View.OnClickListener 
             // wifi 또는 모바일 네트워크 어느 하나라도 연결이 되어있다면,
             if (isConnected() == true) {
                // 연결됨
+                break;
             }
             else
             {
@@ -175,7 +165,6 @@ public class AutoWIFI extends AppCompatActivity implements View.OnClickListener 
                     setNewConnection(context, result.SSID.toString());
                 }
             }
-            break;
         }
         textStatus.append("=======================================\n");
     }
