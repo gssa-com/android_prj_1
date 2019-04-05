@@ -58,8 +58,10 @@ public class AutoWIFI extends AppCompatActivity implements View.OnClickListener 
             final String action = intent.getAction();
 
             if (action.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION) && isAuthIng == false && isConnected() == false) {
+
                 getWIFIScanResult(context); // get WIFISCanResult
                 wifimanager.startScan(); // for refresh
+
             } else if (action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
                 sendBroadcast(new Intent("wifi.ON_NETWORK_STATE_CHANGED"));
             }
@@ -109,10 +111,12 @@ public class AutoWIFI extends AppCompatActivity implements View.OnClickListener 
         // wifi 또는 모바일 네트워크 어느 하나라도 연결이 되어있다면,
         if (wifi.isConnected()) {
             Log.i("연결됨" , "와이파이 연결되어있음"); //와이파이 연결 되있을 때 구분 구문
+            textStatus.append("연결 체크 : 연결 O \n");
             return true;
         }
         else
         {
+            textStatus.append("연결 체크 : 연결 X \n");
             return false;
         }
     }
@@ -156,15 +160,17 @@ public class AutoWIFI extends AppCompatActivity implements View.OnClickListener 
             // wifi 또는 모바일 네트워크 어느 하나라도 연결이 되어있다면,
             if (isConnected() == true) {
                // 연결됨
-                break;
+                textStatus.append("이미 연결되어 있음 " + result.SSID.toString() + "\n");
             }
             else
             {
                 if("O".equals(except_wifi))
                 {
+                    textStatus.append("연결 시도합니다. " + result.SSID.toString() + "\n");
                     setNewConnection(context, result.SSID.toString());
                 }
             }
+            break;
         }
         textStatus.append("=======================================\n");
     }
@@ -200,10 +206,10 @@ public class AutoWIFI extends AppCompatActivity implements View.OnClickListener 
             e.printStackTrace();
         }
 
-
         wifiManager.enableNetwork(netId, true);
         wifiManager.reconnect();
         Log.i("연결됨" , "재연결 완료 SSID : " + ssid); //와이파이 연결 되있을 때 구분 구문
+        textStatus.append("재연결 완료 SSID. " + ssid + "\n");
         isAuthIng = true;
 
         try {
