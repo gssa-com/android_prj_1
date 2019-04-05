@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AutoWIFI</string>
+    <string name="except_keyword">T Free, T Wifi, U+Net, VANA, iptime</string>
+</resources>
